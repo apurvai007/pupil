@@ -393,14 +393,16 @@ def world(
 
             content_scale = gl_utils.get_content_scale(window)
             framebuffer_scale = gl_utils.get_framebuffer_scale(window)
-            g_pool.gui.scale = content_scale
-            window_size = w, h
-            camera_render_size = w - int(icon_bar_width * g_pool.gui.scale), h
-            g_pool.gui.update_window(*window_size)
-            g_pool.gui.collect_menus()
 
-            for p in g_pool.plugins:
-                p.on_window_resize(window, *camera_render_size)
+            if window is g_pool.main_window:
+                g_pool.gui.scale = content_scale
+                window_size = w, h
+                camera_render_size = w - int(icon_bar_width * g_pool.gui.scale), h
+                g_pool.gui.update_window(*window_size)
+                g_pool.gui.collect_menus()
+
+                for p in g_pool.plugins:
+                    p.on_window_resize(window, *camera_render_size)
 
             # Minimum window size required, otherwise parts of the UI can cause openGL
             # issues with permanent effects. Depends on the content scale, which can
