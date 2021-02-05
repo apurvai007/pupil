@@ -335,29 +335,33 @@ def eye(
             glfw.make_context_current(window)
             content_scale = gl_utils.get_content_scale(window)
             framebuffer_scale = gl_utils.get_framebuffer_scale(window)
-            g_pool.gui.scale = content_scale
             window_size = w, h
-            g_pool.camera_render_size = w - int(icon_bar_width * g_pool.gui.scale), h
-            g_pool.gui.update_window(w, h)
-            g_pool.gui.collect_menus()
-            for g in g_pool.graphs:
-                g.scale = content_scale
-                g.adjust_window_size(w, h)
+
+            if window is main_window:
+                g_pool.gui.scale = content_scale
+                g_pool.camera_render_size = w - int(icon_bar_width * g_pool.gui.scale), h
+                g_pool.gui.update_window(w, h)
+                g_pool.gui.collect_menus()
+                for g in g_pool.graphs:
+                    g.scale = content_scale
+                    g.adjust_window_size(w, h)
+
             adjust_gl_view(w, h)
             glfw.make_context_current(active_window)
 
-            # Minimum window size required, otherwise parts of the UI can cause openGL
-            # issues with permanent effects. Depends on the content scale, which can
-            # potentially be dynamically modified, so we re-adjust the size limits every
-            # time here.
-            min_size = int(2 * icon_bar_width * g_pool.gui.scale / framebuffer_scale)
-            glfw.set_window_size_limits(
-                window,
-                min_size,
-                min_size,
-                glfw.DONT_CARE,
-                glfw.DONT_CARE,
-            )
+            if window is main_window:
+                # Minimum window size required, otherwise parts of the UI can cause openGL
+                # issues with permanent effects. Depends on the content scale, which can
+                # potentially be dynamically modified, so we re-adjust the size limits every
+                # time here.
+                min_size = int(2 * icon_bar_width * g_pool.gui.scale / framebuffer_scale)
+                glfw.set_window_size_limits(
+                    window,
+                    min_size,
+                    min_size,
+                    glfw.DONT_CARE,
+                    glfw.DONT_CARE,
+                )
 
             # Needed, to update the window buffer while resizing
             consume_events_and_render_buffer()

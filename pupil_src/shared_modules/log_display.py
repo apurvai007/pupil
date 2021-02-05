@@ -89,11 +89,12 @@ class Log_Display(System_Plugin_Base):
         self.alpha = min(self.alpha, 6.0)
 
     def on_window_resize(self, window, w, h):
-        self.window_scale = gl_utils.get_content_scale(window)
-        self.glfont.set_size(32 * self.window_scale)
-        self.window_size = w, h
-        self.tex.resize(*self.window_size)
-        self.should_redraw = True
+        if window is self.g_pool.main_window:
+            self.window_scale = gl_utils.get_content_scale(window)
+            self.glfont.set_size(32 * self.window_scale)
+            self.window_size = w, h
+            self.tex.resize(*self.window_size)
+            self.should_redraw = True
 
     def recent_events(self, events):
         if self._socket and self._socket.new_data:

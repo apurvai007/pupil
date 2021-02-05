@@ -77,18 +77,19 @@ class System_Graphs(System_Plugin_Base):
         self.on_window_resize(self.g_pool.main_window)
 
     def on_window_resize(self, window, *args):
-        fb_size = glfw.get_framebuffer_size(window)
-        content_scale = gl_utils.get_content_scale(window)
+        if window is self.g_pool.main_window:
+            fb_size = glfw.get_framebuffer_size(window)
+            content_scale = gl_utils.get_content_scale(window)
 
-        self.cpu_graph.scale = content_scale
-        self.fps_graph.scale = content_scale
-        self.conf0_graph.scale = content_scale
-        self.conf1_graph.scale = content_scale
+            self.cpu_graph.scale = content_scale
+            self.fps_graph.scale = content_scale
+            self.conf0_graph.scale = content_scale
+            self.conf1_graph.scale = content_scale
 
-        self.cpu_graph.adjust_window_size(*fb_size)
-        self.fps_graph.adjust_window_size(*fb_size)
-        self.conf0_graph.adjust_window_size(*fb_size)
-        self.conf1_graph.adjust_window_size(*fb_size)
+            self.cpu_graph.adjust_window_size(*fb_size)
+            self.fps_graph.adjust_window_size(*fb_size)
+            self.conf0_graph.adjust_window_size(*fb_size)
+            self.conf1_graph.adjust_window_size(*fb_size)
 
     def gl_display(self):
         if self.show_cpu:
